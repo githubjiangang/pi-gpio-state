@@ -1,0 +1,75 @@
+<html>
+<head>
+	<title>Raspberry Pi RealTime pin State</title>
+	<meta charset='utf8'>
+	<script type="text/javascript" src='./jquery-1.11.1.min.js'></script>
+</head>
+<body>
+	<div style='padding:40px;'>
+		<label style='width:40%;text-align:center;font-size:24px;display:inline-block;'>WaySelect</label>
+		<select id="waySelect" style='width:40%;text-align:center;font-size:24px;'>
+		  <option value='fileWay' selected>fileWay</option>
+		  <option value='realTimeWay'>realTimeWay</option>
+		</select>
+	</div>
+	<table id='pinStateList' style='width:100%;text-align:center;font-size:24px;'>
+		<tr>
+			<th>PIN</th>
+			<th>STATE</th>		
+		</tr>
+	</table>
+<script>
+var duration=5000;
+var requetPin=[1,3,4];
+function getData(){
+	switch($('#waySelect option:selected').val()){
+		case 'fileWay':
+			fileWayReq();
+		break;
+		case 'realTimeWay':
+			realTimeWayReq();
+		break;		
+	}	
+}
+
+getData()
+setInterval(function(){
+	getData()
+},duration);
+
+function realTimeWayReq(){
+	$('#pinStateList tr:gt(0)').remove();
+	$.each(requetPin,function(key,value){
+		console.log('key',key,value)
+		$.ajax({
+			url:'http://localhost/getGpioState/realTimeWay?pin='+value,
+			type:'Get',
+			success:function(res){
+				console.log('succes res:',res);
+				$('#pinStateList tbody').append("<tr><td>"+res.key+"</td><td>"+res.value+"<td></tr>");
+			},
+			error:function(err){
+				console.log('error:',error);
+			}
+		});	
+	});
+}
+function fileWayReq(){
+	$.ajax({
+		url:'http://localhost/getGpioState/fileWay',
+		type:'Get',
+		success:function(res){
+			console.log('succes res:',res);
+			$('#pinStateList tr:gt(0)').remove();
+			$.each(res,function(key,value){
+				$('#pinStateList tbody').append("<tr><td>"+key+"</td><td>"+value+"<td></tr>");
+			});
+		},
+		error:function(err){
+			console.log('error:',error);
+		}
+	});
+}
+</script>
+</body>
+</html>
