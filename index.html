@@ -19,8 +19,9 @@
 		</tr>
 	</table>
 <script>
-var duration=5000;
-var requetPin=[1,3,4];
+var  host='192.168.2.151';
+var duration=8000;
+var requetPin=[16];
 function getData(){
 	switch($('#waySelect option:selected').val()){
 		case 'fileWay':
@@ -42,7 +43,7 @@ function realTimeWayReq(){
 	$.each(requetPin,function(key,value){
 		console.log('key',key,value)
 		$.ajax({
-			url:'http://localhost/getGpioState/realTimeWay?pin='+value,
+			url:'http://'+host+'/getGpioState/realTimeWay?pin='+value,
 			type:'Get',
 			success:function(res){
 				console.log('succes res:',res);
@@ -56,7 +57,7 @@ function realTimeWayReq(){
 }
 function fileWayReq(){
 	$.ajax({
-		url:'http://localhost/getGpioState/fileWay',
+		url:'http://'+host+'/getGpioState/fileWay',
 		type:'Get',
 		success:function(res){
 			console.log('succes res:',res);

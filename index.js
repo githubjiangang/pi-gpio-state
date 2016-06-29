@@ -1,4 +1,4 @@
-var testMode=true;
+var testMode=false;
 if(testMode){
 	var gpio ={read:function(pin,callback){
 		var value=false;
@@ -24,6 +24,7 @@ if(testMode){
 var http = require('http');        // Http Server
 var fs = require('fs');            // FileSystem
 var server = new http.Server();    // Create a Http Server
+
 server.listen(80);            //server prot:80
 server.on('request', function(request, response) { //when a request come,trigger this function
     var url = require('url').parse(request.url);
@@ -59,7 +60,7 @@ server.on('request', function(request, response) { //when a request come,trigger
 	        break;   
 	    case '/getGpioState/realTimeWay': //  get pin state from GPIO
 	    	var args=getargs(url.query);
-	    	var pin=args['pin'];
+	    	var pin=Number(args['pin']);
 	    	console.log('pin',pin);
 		    gpio.read(pin, function(err, value) {
 	            if(err) {
