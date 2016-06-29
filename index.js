@@ -62,7 +62,7 @@ server.on('request', function(request, response) { //when a request come,trigger
 	    	var args=getargs(url.query);
 	    	var pin=Number(args['pin']);
 	    	console.log('pin',pin);
-	    	pio.open(16, "output", function(err) {		// Open pin 16 for output
+	    	gpio.open(pin, "output", function(err) {		// Open pin 16 for output
 			    gpio.read(pin, function(err, value) {
 		            if(err) {
 		                response.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
