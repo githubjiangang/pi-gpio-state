@@ -62,17 +62,20 @@ server.on('request', function(request, response) { //when a request come,trigger
 	    	var args=getargs(url.query);
 	    	var pin=Number(args['pin']);
 	    	console.log('pin',pin);
-		    gpio.read(pin, function(err, value) {
-	            if(err) {
-	                response.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
-	                response.write(err.message);
-	                response.end();
-	            } else {
-	            	console.log('pin '+pin+' value:',value);
-	                response.writeHead(200, { 'Content-type':'application/json; charset=UTF-8'});
-	                response.write(JSON.stringify({key:pin,value:value}));
-	                response.end();
-	            }	    			
+	    	pio.open(16, "output", function(err) {		// Open pin 16 for output
+			    gpio.read(pin, function(err, value) {
+		            if(err) {
+		                response.writeHead(404, { 'Content-Type':'text/plain; charset="UTF-8"' });
+		                response.write(err.message);
+		                response.end();
+		            } else {
+		            	console.log('pin '+pin+' value:',value);
+		                response.writeHead(200, { 'Content-type':'application/json; charset=UTF-8'});
+		                response.write(JSON.stringify({key:pin,value:value}));
+		                response.end();
+		            }
+		            gpio.close(pin);	    			
+				}); 
 			}); 
 	        break;                              
 
